@@ -22,12 +22,18 @@ Python learning labs organized by lab number. Each lab folder contains a complet
 - [Lab 21 - Sets](Lab%2021/)
 - [Lab 22 - Advanced Set Operations](Lab%2022/)
 - [Lab 23 - Strings and String Manipulation](Lab%2023/)
+- [Lab 24 - String Formatting and Advanced Manipulation](Lab%2024/)
+- [Lab 25 - Files and Input/Output](Lab%2025/)
+- [Lab 26 - Working with CSV Files](Lab%2026/)
+- [Lab 27 - Reading and Writing JSON Files](Lab%2027/)
+- [Lab 28 - Advanced File I/O and Context Managers](Lab%2028/)
+- [Lab 29 - Data Structures and File I/O Final Project](Lab%2029/)
 - [Lab 31 - Importing Modules and Standard Libraries](Lab%2031/)
 
 ## Running a Lab
 
 Open a lab folder and run its Python file with Python 3, for example:
 
-    python3 lab_06.py
+    python3 lab_24.py
 
-Each lab script is designed to run without requiring interactive input.
+Each lab script is designed to run without requiring interactive input. Most scripts create their own sample input and output files inside a dedicated output folder.
