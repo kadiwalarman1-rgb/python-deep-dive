@@ -1,3 +1,11 @@
+import timeit
+
+def traditional_squares(numbers):
+    results = []
+    for number in numbers:
+        results.append(number ** 2)
+    return results
+
 def main():
     numbers = list(range(1, 11))
     squares = [number ** 2 for number in numbers]
@@ -12,6 +20,7 @@ def main():
     word_lengths = {word: len(word) for word in words}
 
     print("Squares:", squares)
+    print("Traditional loop squares:", traditional_squares(numbers))
     print("Odd numbers:", odd_numbers)
     print("Large odd squares:", large_odd_squares)
     print("Long words:", long_words)
@@ -20,6 +29,12 @@ def main():
     print("Flattened:", flattened)
     print("Unique initials:", unique_initials)
     print("Word lengths:", word_lengths)
+
+    sample = list(range(1000))
+    loop_time = timeit.timeit(lambda: traditional_squares(sample), number=1000)
+    comprehension_time = timeit.timeit(lambda: [number ** 2 for number in sample], number=1000)
+    print(f"Traditional loop: {loop_time:.6f} seconds")
+    print(f"List comprehension: {comprehension_time:.6f} seconds")
 
 if __name__ == "__main__":
     main()
