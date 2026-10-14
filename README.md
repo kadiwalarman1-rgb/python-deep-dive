@@ -1,6 +1,6 @@
 # Python Deep Dive
 
-Python learning labs organized by lab number. Each lab folder contains a complete runnable Python example and a README describing the concepts covered.
+Python learning labs organized by lab number. Each lab folder contains complete runnable Python examples and a README describing the concepts covered.
 
 ## Available Labs
 
@@ -29,11 +29,11 @@ Python learning labs organized by lab number. Each lab folder contains a complet
 - [Lab 28 - Advanced File I/O and Context Managers](Lab%2028/)
 - [Lab 29 - Data Structures and File I/O Final Project](Lab%2029/)
 - [Lab 31 - Importing Modules and Standard Libraries](Lab%2031/)
+- [Lab 32 - Creating and Using Python Packages](Lab%2032/)
 
 ## Running a Lab
 
-Open a lab folder and run its Python file with Python 3, for example:
+Open a lab folder and follow its README. Most scripts can be run with Python 3 without interactive input. For Lab 32, run the demo and test suite from inside the Lab 32 directory:
 
-    python3 lab_24.py
-
-Each lab script is designed to run without requiring interactive input. Most scripts create their own sample input and output files inside a dedicated output folder.
+    python3 test_mathtools.py
+    python3 advanced_test.py
