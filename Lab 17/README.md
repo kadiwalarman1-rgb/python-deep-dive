@@ -6,6 +6,7 @@
 - Filtering values with one or more conditions.
 - Using nested comprehensions and flattening nested lists.
 - Transforming strings and building set and dictionary comprehensions.
+- Comparing list comprehensions with a traditional loop using timeit.
 
 ## Run
 
