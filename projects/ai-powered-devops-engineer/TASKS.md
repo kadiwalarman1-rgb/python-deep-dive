@@ -33,8 +33,8 @@ Status: [ ] not implemented, [-] implemented but verification pending, [x] imple
 - [ ] Review package versions and licensing.
 
 ## Future integrations
-- [ ] Add optional Docker health monitoring.
-- [ ] Add read-only CloudWatch Logs integration and narrow IAM policy.
+- [-] Add optional Docker health/status reader and consent-gated dashboard UI; runtime verification pending.
+- [-] Add read-only CloudWatch Logs reader, dashboard UI, and narrow policy template; runtime verification pending.
 - [ ] Review deployment options and costs before provisioning resources.
 
 ## Portfolio
