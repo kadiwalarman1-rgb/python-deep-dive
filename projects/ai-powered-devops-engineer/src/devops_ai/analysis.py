@@ -25,7 +25,7 @@ def fingerprint(message: str) -> str:
     for pattern in _VOLATILE_PATTERNS:
         normalized = pattern.sub("<variable>", normalized)
     normalized = re.sub(r"\s+", " ", normalized)
-    return hashlib.sha256(normalized.encode("utf-8")).hexdigest()[:16]
+    return hashlib.sha256(normalized.encode()).hexdigest()[:16]
 
 
 def _time_range(events: list[LogEvent]) -> tuple[datetime | None, datetime | None]:
