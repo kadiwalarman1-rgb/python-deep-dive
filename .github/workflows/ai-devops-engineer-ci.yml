@@ -43,7 +43,7 @@ jobs:
       - name: Python security scan
         run: bandit -r src app.py
       - name: Dependency audit
-        run: pip-audit
+        run: pip-audit --skip-editable
   docker-build:
     runs-on: ubuntu-latest
     steps:
