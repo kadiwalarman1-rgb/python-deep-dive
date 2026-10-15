@@ -12,21 +12,23 @@ class MockDiagnosisProvider:
         hypotheses = []
         for finding in evidence.get("findings", [])[:5]:
             summary = str(finding.get("summary", "Unspecified signal"))[:300]
-            hypotheses.append({
-                "description": f"Investigate whether this observed signal relates to the incident: {summary}",
-                "supporting_evidence": [
-                    f"Rule-based finding category: {finding.get('category', 'unknown')}",
-                    f"Observed count: {finding.get('count', 0)}",
-                ],
-                "missing_or_contradicting_evidence": [
-                    "No dependency metrics or traces were provided to verify causality."
-                ],
-                "confidence": "LOW",
-                "verification_steps": [
-                    "Correlate this time window with application and dependency metrics.",
-                    "Inspect traces and deployment changes before concluding root cause.",
-                ],
-            })
+            hypotheses.append(
+                {
+                    "description": f"Investigate whether this observed signal relates to the incident: {summary}",
+                    "supporting_evidence": [
+                        f"Rule-based finding category: {finding.get('category', 'unknown')}",
+                        f"Observed count: {finding.get('count', 0)}",
+                    ],
+                    "missing_or_contradicting_evidence": [
+                        "No dependency metrics or traces were provided to verify causality."
+                    ],
+                    "confidence": "LOW",
+                    "verification_steps": [
+                        "Correlate this time window with application and dependency metrics.",
+                        "Inspect traces and deployment changes before concluding root cause.",
+                    ],
+                }
+            )
         return {
             "summary": (
                 "Offline demonstration output built from rule-based findings. "
