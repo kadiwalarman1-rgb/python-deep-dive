@@ -16,7 +16,7 @@ A local-first, evidence-driven tool for application log analysis, incident triag
 
 ## Requirements
 
-Python 3.11 or later and pip. Docker is optional. AWS credentials and Bedrock access are not required for local log analysis.
+Python 3.11 or later and pip. Docker is optional. AWS credentials and Bedrock access are not required for local log analysis. The Docker SDK is an optional monitoring extra.
 
 ## Local setup
 
@@ -25,7 +25,7 @@ Windows PowerShell:
     py -m venv .venv
     .\.venv\Scripts\Activate.ps1
     python -m pip install --upgrade pip
-    pip install -e ".[dev]"
+    pip install -e ".[dev,monitoring]"
     streamlit run app.py
 
 Linux or macOS:
@@ -44,7 +44,9 @@ Open the local URL printed by Streamlit, usually http://localhost:8501.
 2. Run analysis.
 3. Review parsing results, metrics, findings, and evidence.
 4. Download a JSON or Markdown report.
-5. For optional Bedrock diagnosis, configure the Region and model ID, enable the integration, and explicitly approve sending sanitized evidence to the selected AWS model.
+5. Choose AWS CloudWatch Logs to explicitly approve a bounded, read-only query against an existing log group. This needs an AWS profile or IAM role with narrowly scoped `logs:FilterLogEvents` permission.
+6. Open the optional Docker status section and approve inspection before querying an already-running local Docker daemon. Docker socket access is privileged; no socket is mounted by the supplied Compose file.
+7. For optional Bedrock diagnosis, configure the Region and model ID, enable the integration, and explicitly approve sending sanitized evidence to the selected AWS model.
 
 Sample data is synthetic. Do not upload confidential production logs unless you have approval and understand data-handling implications.
 
@@ -68,7 +70,7 @@ See docs/architecture.md, docs/threat-model.md, and docs/deployment.md.
 - Incidents are not persisted across app restarts.
 - Error-spike detection is a configurable rule, not a statistically calibrated model.
 - Bedrock diagnoses are hypotheses and require human verification.
-- Docker and CloudWatch monitoring are future milestones and are not implemented in this initial core.
+- Docker status inspection and CloudWatch Logs read-only adapters are implemented but must still be verified in a configured runtime. Docker integration requires the optional SDK extra. The Docker socket is not mounted into the Compose container.
 - Production use would require authentication, durable storage, load testing, security review, and operational monitoring.
 
 ## Roadmap
@@ -76,9 +78,8 @@ See docs/architecture.md, docs/threat-model.md, and docs/deployment.md.
 - [x] Local log parsing and deterministic analysis
 - [x] Evidence-backed findings and report export
 - [x] Optional consent-gated Bedrock adapter
-- [ ] Docker health monitoring
-- [ ] Read-only CloudWatch Logs integration
-- [ ] CI verification, dependency audit, and Docker build
+- [-] Read-only Docker status and CloudWatch Logs adapter/UI, verification pending
+- [ ] CI checks, dependency audit, and Docker build verification
 - [ ] Deployment review and real screenshots
 
 ## Tests
