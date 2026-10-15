@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -30,12 +31,30 @@ def _safe_findings(analysis: dict[str, Any]) -> list[dict[str, Any]]:
     result = []
     for finding in analysis.get("findings", []):
         item = finding.to_dict()
-        item["summary"] = redact_sensitive_text(str(item.get("summary", "")), max_chars=1000)
+        item["summary"] = redact_sensitive_text(
+            str(item.get("summary", "")), max_chars=1000
+        )
         result.append(item)
     return result
 
 
-st.set_page_config(page_title="AI-Powered DevOps Engineer", page_icon="🛠️", layout="wide")
+def _save_analysis(events: list[Any], rejected: int, source_name: str, threshold: int) -> None:
+    analysis = analyze_events(
+        events,
+        rejected_lines=rejected,
+        error_spike_threshold=threshold,
+    )
+    st.session_state["devops_analysis"] = analysis
+    st.session_state["devops_events"] = events
+    st.session_state["devops_source_name"] = source_name
+    st.session_state.pop("devops_diagnosis", None)
+
+
+st.set_page_config(
+    page_title="AI-Powered DevOps Engineer",
+    page_icon="🛠️",
+    layout="wide",
+)
 st.title("AI-Powered DevOps Engineer")
 st.caption("Evidence-first log triage with optional AI-assisted diagnosis.")
 st.info(
@@ -50,70 +69,169 @@ with st.sidebar:
         "Error burst threshold (per five minutes)",
         min_value=1,
         max_value=30,
-        value=SETTINGS.error_spike_threshold,
+        value=min(30, max(1, SETTINGS.error_spike_threshold)),
     )
-    st.caption(f"Maximum uploaded file size: {SETTINGS.max_upload_bytes // 1024 // 1024} MiB")
+    st.caption(
+        f"Maximum uploaded file size: {SETTINGS.max_upload_bytes // 1024 // 1024} MiB"
+    )
     st.divider()
     st.write("AI provider")
     bedrock_ready = SETTINGS.bedrock_enabled and bool(SETTINGS.bedrock_model_id)
     if bedrock_ready:
-        st.success("Amazon Bedrock is configured; a separate consent checkbox is still required.")
+        st.success(
+            "Amazon Bedrock is configured; a separate consent checkbox is still required."
+        )
         st.caption(f"Region: {SETTINGS.aws_region}")
     else:
         st.warning("Offline demo provider active. No language model is called.")
-        st.caption("Set DEVOPS_AI_BEDROCK_ENABLED=true and BEDROCK_MODEL_ID to configure Bedrock.")
+        st.caption(
+            "Set DEVOPS_AI_BEDROCK_ENABLED=true and BEDROCK_MODEL_ID to configure Bedrock."
+        )
 
-source_mode = st.radio("Input source", ["Synthetic sample", "Upload a log file"], horizontal=True)
-source_name = "application.log"
+source_mode = st.radio(
+    "Input source",
+    ["Synthetic sample", "Upload a log file", "AWS CloudWatch Logs"],
+    horizontal=True,
+)
 raw_content: bytes | None = None
+source_name = "application.log"
 
-if source_mode == "Synthetic sample":
-    sample_label = st.selectbox("Choose a scenario", list(SAMPLE_FILES.keys()))
-    source_name = SAMPLE_FILES[sample_label]
-    sample_path = PROJECT_DIR / "sample_data" / source_name
-    try:
-        raw_content = sample_path.read_bytes()
-    except OSError:
-        st.error("Sample file could not be read. Check the repository sample_data directory.")
-else:
-    uploaded = st.file_uploader(
-        "Upload .log, .txt, .jsonl, or .ndjson",
-        type=["log", "txt", "jsonl", "ndjson"],
-        max_upload_size=max(1, SETTINGS.max_upload_bytes // (1024 * 1024)),
+if source_mode == "AWS CloudWatch Logs":
+    st.subheader("Read-only CloudWatch Logs")
+    st.warning(
+        "This action calls the AWS CloudWatch Logs API and may incur AWS charges. "
+        "It does not create or change AWS resources. Use an existing credential profile "
+        "or IAM role with access restricted to the intended log group."
     )
-    if uploaded is not None:
-        source_name = Path(uploaded.name).name
-        raw_content = uploaded.getvalue()
-        if len(raw_content) > SETTINGS.max_upload_bytes:
-            st.error("File exceeds the configured upload limit.")
-            raw_content = None
+    with st.form("cloudwatch_read_form"):
+        log_group_name = st.text_input(
+            "Existing CloudWatch log group name",
+            placeholder="/aws/lambda/my-function",
+        ).strip()
+        lookback_minutes = st.slider(
+            "Look back (minutes)", min_value=5, max_value=1440, value=60, step=5
+        )
+        approve_cloudwatch = st.checkbox(
+            "I approve making a read-only AWS API request for this log group."
+        )
+        read_cloudwatch = st.form_submit_button("Fetch and analyze CloudWatch events")
+    if read_cloudwatch:
+        if not approve_cloudwatch:
+            st.error("Confirm the read-only AWS request before proceeding.")
+        elif not log_group_name:
+            st.error("Enter an existing log group name.")
+        else:
+            try:
+                from devops_ai.monitoring.cloudwatch import CloudWatchLogsReader
 
-if st.button("Analyze logs", type="primary", disabled=raw_content is None):
-    try:
-        events, rejected = parse_log_bytes(
-            raw_content,
-            max_bytes=SETTINGS.max_upload_bytes,
-            default_service=service_name.strip() or "unknown",
+                end_time = datetime.now(UTC)
+                start_time = end_time - timedelta(minutes=lookback_minutes)
+                with st.spinner("Reading a bounded sample of CloudWatch events..."):
+                    events = CloudWatchLogsReader(
+                        region=SETTINGS.aws_region
+                    ).fetch_events(
+                        log_group_name=log_group_name,
+                        start_time_ms=int(start_time.timestamp() * 1000),
+                        end_time_ms=int(end_time.timestamp() * 1000),
+                        max_events=500,
+                    )
+                _save_analysis(
+                    events,
+                    rejected=0,
+                    source_name=f"CloudWatch Logs: {log_group_name}",
+                    threshold=spike_threshold,
+                )
+                st.success(f"Received {len(events)} CloudWatch events.")
+                if not events:
+                    st.info("No events were returned for this time range.")
+            except Exception as exc:
+                st.error(
+                    f"CloudWatch request failed ({type(exc).__name__}). Check the Region, "
+                    "log group, network access, and read-only IAM permissions. "
+                    "No resources were created or changed."
+                )
+else:
+    if source_mode == "Synthetic sample":
+        sample_label = st.selectbox("Choose a scenario", list(SAMPLE_FILES.keys()))
+        source_name = SAMPLE_FILES[sample_label]
+        sample_path = PROJECT_DIR / "sample_data" / source_name
+        try:
+            raw_content = sample_path.read_bytes()
+        except OSError:
+            st.error("Sample file could not be read. Check the repository sample_data directory.")
+    else:
+        uploaded = st.file_uploader(
+            "Upload .log, .txt, .jsonl, or .ndjson",
+            type=["log", "txt", "jsonl", "ndjson"],
+            max_upload_size=max(1, SETTINGS.max_upload_bytes // (1024 * 1024)),
         )
-        analysis = analyze_events(
-            events,
-            rejected_lines=rejected,
-            error_spike_threshold=spike_threshold,
+        if uploaded is not None:
+            source_name = Path(uploaded.name).name
+            raw_content = uploaded.getvalue()
+            if len(raw_content) > SETTINGS.max_upload_bytes:
+                st.error("File exceeds the configured upload limit.")
+                raw_content = None
+
+    if st.button("Analyze logs", type="primary", disabled=raw_content is None):
+        try:
+            events, rejected = parse_log_bytes(
+                raw_content,
+                max_bytes=SETTINGS.max_upload_bytes,
+                default_service=service_name.strip() or "unknown",
+            )
+            _save_analysis(
+                events,
+                rejected=rejected,
+                source_name=source_name,
+                threshold=spike_threshold,
+            )
+            st.success(f"Analysis complete: {len(events)} events parsed.")
+        except (ValueError, OSError) as exc:
+            st.error(f"Unable to analyze this input: {exc}")
+
+st.subheader("Optional Docker container status")
+with st.expander("Inspect local Docker containers", expanded=False):
+    st.write(
+        "This integration reads container names, IDs, state, health, and image labels only. "
+        "It does not read environment variables or container logs, execute commands, or change "
+        "container state. Access to a Docker daemon/socket is highly privileged."
+    )
+    approve_docker = st.checkbox(
+        "I approve querying the Docker daemon available to this Python process.",
+        key="approve_docker_read",
+    )
+    if st.button("Refresh Docker status"):
+        if not approve_docker:
+            st.error("Confirm Docker inspection before querying the daemon.")
+        else:
+            try:
+                from devops_ai.monitoring.docker_monitor import DockerMonitor
+
+                with st.spinner("Reading Docker container status..."):
+                    docker_rows = DockerMonitor().list_statuses(max_containers=50)
+                st.session_state["devops_docker_rows"] = docker_rows
+                st.session_state.pop("devops_docker_error", None)
+            except Exception as exc:
+                st.session_state["devops_docker_error"] = str(exc)
+                st.session_state.pop("devops_docker_rows", None)
+    if "devops_docker_error" in st.session_state:
+        st.warning(st.session_state["devops_docker_error"])
+        st.caption(
+            'To enable the optional SDK, install with: pip install -e ".[dev,monitoring]". '
+            "The Docker daemon must already be running and accessible."
         )
-        st.session_state["devops_analysis"] = analysis
-        st.session_state["devops_events"] = events
-        st.session_state["devops_source_name"] = source_name
-        st.session_state.pop("devops_diagnosis", None)
-        st.success(f"Analysis complete: {len(events)} events parsed.")
-    except (ValueError, OSError) as exc:
-        st.error(f"Unable to analyze this input: {exc}")
+    elif "devops_docker_rows" in st.session_state:
+        if st.session_state["devops_docker_rows"]:
+            st.dataframe(st.session_state["devops_docker_rows"], use_container_width=True)
+        else:
+            st.info("Docker returned no containers.")
 
 analysis = st.session_state.get("devops_analysis")
 if analysis is None:
     st.subheader("Quick start")
     st.write(
-        "Choose a synthetic incident and select Analyze logs. The database and HTTP 5xx samples "
-        "contain repeated failures; the normal sample is a baseline."
+        "Choose a synthetic incident and select Analyze logs, or explicitly approve a "
+        "read-only CloudWatch request. Database and HTTP 5xx samples contain repeated failures."
     )
     st.stop()
 
@@ -162,11 +280,16 @@ else:
         selected_finding = st.selectbox(
             "Finding",
             findings,
-            format_func=lambda item: f'{item["severity"]} | {item["category"]} | {item["summary"][:90]}',
+            format_func=lambda item: (
+                f'{item["severity"]} | {item["category"]} | {item["summary"][:90]}'
+            ),
         )
         st.json(selected_finding)
 
-report = build_report(analysis, source_name=st.session_state.get("devops_source_name", "unknown"))
+report = build_report(
+    analysis,
+    source_name=st.session_state.get("devops_source_name", "unknown"),
+)
 st.subheader("Export report")
 col_json, col_md = st.columns(2)
 with col_json:
@@ -235,10 +358,13 @@ if st.button("Generate diagnosis"):
                 "provider": provider.name,
                 "result": provider.diagnose(safe_evidence),
             }
-    except Exception as exc:  # Provider failures must not break deterministic analysis.
+    except Exception as exc:
         st.session_state["devops_diagnosis"] = {
             "provider": "unavailable",
-            "error": f"{type(exc).__name__}: AI diagnosis unavailable. Core log analysis remains usable.",
+            "error": (
+                f"{type(exc).__name__}: AI diagnosis unavailable. "
+                "Core log analysis remains usable."
+            ),
         }
 
 diagnosis = st.session_state.get("devops_diagnosis")
