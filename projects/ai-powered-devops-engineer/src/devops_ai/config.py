@@ -30,7 +30,7 @@ class Settings:
     bedrock_model_id: str = ""
 
     @classmethod
-    def from_env(cls) -> "Settings":
+    def from_env(cls) -> Settings:
         return cls(
             max_upload_bytes=_positive_int("MAX_UPLOAD_BYTES", 5 * 1024 * 1024, minimum=1024),
             error_spike_threshold=_positive_int("ERROR_SPIKE_THRESHOLD", 5),
