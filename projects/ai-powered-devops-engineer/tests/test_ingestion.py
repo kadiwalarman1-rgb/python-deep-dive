@@ -1,8 +1,8 @@
-from datetime import timezone
+from datetime import UTC
 
 import pytest
 
-from devops_ai.ingestion import parse_log_bytes, parse_lines
+from devops_ai.ingestion import parse_lines, parse_log_bytes
 
 
 def test_plain_text_parser_normalizes_timestamp_and_level():
@@ -14,7 +14,7 @@ def test_plain_text_parser_normalizes_timestamp_and_level():
     assert len(events) == 2
     assert events[0].level == "ERROR"
     assert events[0].timestamp is not None
-    assert events[0].timestamp.tzinfo == timezone.utc
+    assert events[0].timestamp.tzinfo == UTC
 
 
 def test_json_lines_parser_and_malformed_json_count():
