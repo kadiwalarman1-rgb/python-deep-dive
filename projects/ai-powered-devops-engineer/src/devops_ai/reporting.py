@@ -44,28 +44,35 @@ def to_json(report: dict[str, Any]) -> str:
 def to_markdown(report: dict[str, Any]) -> str:
     summary = report.get("summary", {})
     lines = [
-        "# DevOps Log Analysis Report", "",
+        "# DevOps Log Analysis Report",
+        "",
         f"- Generated at: {report.get('generated_at', 'unknown')}",
         f"- Source: {report.get('source_name', 'unknown')}",
         f"- Total events: {summary.get('total_events', 0)}",
         f"- Rejected lines: {summary.get('rejected_lines', 0)}",
         f"- Errors and critical events: {summary.get('error_count', 0)}",
         f"- Warnings: {summary.get('warning_count', 0)}",
-        f"- Error rate: {summary.get('error_rate_percent', 0.0)}%", "",
-        "## Findings", "",
+        f"- Error rate: {summary.get('error_rate_percent', 0.0)}%",
+        "",
+        "## Findings",
+        "",
     ]
     findings = report.get("findings", [])
     if not findings:
         lines.append("No findings were produced by the configured rules.")
     for finding in findings:
-        lines.extend([
-            f"### {finding.get('severity', 'UNKNOWN')}: {finding.get('summary', 'Untitled finding')}",
-            "", f"- Category: {finding.get('category', 'unknown')}",
-            f"- Count: {finding.get('count', 0)}",
-            f"- Method: {finding.get('method', 'unknown')}",
-            f"- Evidence line numbers: {', '.join(map(str, finding.get('evidence_lines', []))) or 'not available'}",
-            f"- Limitation: {finding.get('limitations', 'No limitation stated')}", "",
-        ])
+        lines.extend(
+            [
+                f"### {finding.get('severity', 'UNKNOWN')}: {finding.get('summary', 'Untitled finding')}",
+                "",
+                f"- Category: {finding.get('category', 'unknown')}",
+                f"- Count: {finding.get('count', 0)}",
+                f"- Method: {finding.get('method', 'unknown')}",
+                f"- Evidence line numbers: {', '.join(map(str, finding.get('evidence_lines', []))) or 'not available'}",
+                f"- Limitation: {finding.get('limitations', 'No limitation stated')}",
+                "",
+            ]
+        )
     lines.extend(["## Limitations", ""])
     lines.extend(f"- {item}" for item in report.get("limitations", []))
     lines.append("")
