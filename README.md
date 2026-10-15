@@ -30,6 +30,7 @@ Python learning labs organized by lab number. Each lab folder contains complete 
 - [Lab 29 - Data Structures and File I/O Final Project](Lab%2029/)
 - [Lab 31 - Importing Modules and Standard Libraries](Lab%2031/)
 - [Lab 32 - Creating and Using Python Packages](Lab%2032/)
+- [Lab 33 - Exploring the Python Standard Library](Lab%2033/)
 
 ## Running a Lab
 
