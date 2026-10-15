@@ -6,10 +6,12 @@ from devops_ai.ingestion import parse_lines, parse_log_bytes
 
 
 def test_plain_text_parser_normalizes_timestamp_and_level():
-    events, rejected = parse_lines([
-        "2026-10-15T10:00:00Z ERROR database connection refused",
-        "2026-10-15T10:01:00Z INFO request completed",
-    ])
+    events, rejected = parse_lines(
+        [
+            "2026-10-15T10:00:00Z ERROR database connection refused",
+            "2026-10-15T10:01:00Z INFO request completed",
+        ]
+    )
     assert rejected == 0
     assert len(events) == 2
     assert events[0].level == "ERROR"
@@ -18,10 +20,12 @@ def test_plain_text_parser_normalizes_timestamp_and_level():
 
 
 def test_json_lines_parser_and_malformed_json_count():
-    events, rejected = parse_lines([
-        '{"timestamp":"2026-10-15T10:00:00Z","level":"ERROR","message":"db failed","service":"orders"}',
-        '{"malformed":',
-    ])
+    events, rejected = parse_lines(
+        [
+            '{"timestamp":"2026-10-15T10:00:00Z","level":"ERROR","message":"db failed","service":"orders"}',
+            '{"malformed":',
+        ]
+    )
     assert len(events) == 1
     assert events[0].service == "orders"
     assert events[0].level == "ERROR"
