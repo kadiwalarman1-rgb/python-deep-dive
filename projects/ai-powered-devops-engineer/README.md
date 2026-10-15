@@ -33,7 +33,7 @@ Linux or macOS:
     python3 -m venv .venv
     source .venv/bin/activate
     python -m pip install --upgrade pip
-    pip install -e ".[dev]"
+    pip install -e ".[dev,monitoring]"
     streamlit run app.py
 
 Open the local URL printed by Streamlit, usually http://localhost:8501.
@@ -70,7 +70,7 @@ See docs/architecture.md, docs/threat-model.md, and docs/deployment.md.
 - Incidents are not persisted across app restarts.
 - Error-spike detection is a configurable rule, not a statistically calibrated model.
 - Bedrock diagnoses are hypotheses and require human verification.
-- Docker status inspection and CloudWatch Logs read-only adapters are implemented but must still be verified in a configured runtime. Docker integration requires the optional SDK extra. The Docker socket is not mounted into the Compose container.
+- Docker status inspection and CloudWatch Logs read-only adapters have CI unit tests using mocked integrations, but have not been tested against a real Docker daemon or AWS account. Docker inspection requires the optional SDK extra. The Docker socket is not mounted into the Compose container.
 - Production use would require authentication, durable storage, load testing, security review, and operational monitoring.
 
 ## Roadmap
@@ -79,7 +79,7 @@ See docs/architecture.md, docs/threat-model.md, and docs/deployment.md.
 - [x] Evidence-backed findings and report export
 - [x] Optional consent-gated Bedrock adapter
 - [-] Read-only Docker status and CloudWatch Logs adapter/UI, verification pending
-- [ ] CI checks, dependency audit, and Docker build verification
+- [x] CI checks: tests, lint, formatting, Bandit, dependency audit, app startup, Docker build, and container smoke test
 - [ ] Deployment review and real screenshots
 
 ## Tests
@@ -89,7 +89,7 @@ See docs/architecture.md, docs/threat-model.md, and docs/deployment.md.
     ruff format --check .
     bandit -r src app.py
 
-These checks must be executed in an actual Python environment before results can be claimed.
+GitHub Actions currently verifies 26 passing tests at 84% total measured coverage, Ruff lint/formatting, Bandit, pip-audit, Streamlit startup, Docker image build, and container health startup. Check the linked Actions run for the latest commit. Live Bedrock, CloudWatch, and local Docker-daemon integrations still require testing in a configured environment.
 
 ## License
 
