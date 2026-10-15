@@ -32,7 +32,7 @@ def test_naive_timestamp_is_treated_as_utc():
     events, rejected = parse_lines(["2026-10-15 10:00:00 WARNING slow dependency"])
     assert rejected == 0
     assert events[0].timestamp is not None
-    assert events[0].timestamp.tzinfo == timezone.utc
+    assert events[0].timestamp.tzinfo == UTC
 
 
 def test_upload_limit_is_enforced():
