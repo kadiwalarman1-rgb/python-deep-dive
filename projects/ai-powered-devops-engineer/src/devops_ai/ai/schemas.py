@@ -59,13 +59,15 @@ def parse_diagnosis(response_text: str) -> dict[str, Any]:
             raise InvalidDiagnosis("A root-cause hypothesis needs a description.")
         if confidence not in CONFIDENCE_LEVELS:
             confidence = "LOW"
-        normalized_hypotheses.append({
-            "description": description[:1000],
-            "supporting_evidence": supporting[:10],
-            "missing_or_contradicting_evidence": missing[:10],
-            "confidence": confidence,
-            "verification_steps": verification[:10],
-        })
+        normalized_hypotheses.append(
+            {
+                "description": description[:1000],
+                "supporting_evidence": supporting[:10],
+                "missing_or_contradicting_evidence": missing[:10],
+                "confidence": confidence,
+                "verification_steps": verification[:10],
+            }
+        )
 
     limitations = payload.get("limitations", "AI output is a hypothesis and must be verified.")
     if not isinstance(limitations, str):
