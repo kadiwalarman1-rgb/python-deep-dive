@@ -1,33 +1,33 @@
 # Implementation Checklist
 
-Status: [ ] not started, [-] in progress, [x] verified complete, [!] blocked.
+Status: [ ] not implemented, [-] implemented but verification pending, [x] implemented and verified, [!] blocked.
 
 ## Foundation
-- [x] Create project folder and initial architecture documents.
-- [x] Define local-first and no-automatic-remediation boundaries.
+- [-] Create project folder and initial architecture documents.
+- [-] Define local-first and no-automatic-remediation boundaries.
 - [ ] Install packages and execute tests in a Python environment.
 - [ ] Verify application startup locally.
 
 ## Core functionality
-- [x] Parse plain-text logs and JSON Lines.
-- [x] Normalize timestamps and classify levels.
-- [x] Calculate metrics and repeated-error findings.
-- [x] Detect configurable error-count spikes.
-- [x] Export JSON and Markdown reports.
+- [-] Parse plain-text logs and JSON Lines.
+- [-] Normalize timestamps and classify levels.
+- [-] Calculate metrics and repeated-error findings.
+- [-] Detect configurable error-count spikes.
+- [-] Export JSON and Markdown reports.
 - [ ] Expand edge-case tests and fixtures.
 - [ ] Run tests and fix failures.
 
 ## Dashboard and AI
-- [x] Build Streamlit workflow for sample data and uploads.
-- [x] Add a clearly labeled offline demo diagnosis provider.
-- [x] Add optional Bedrock adapter with explicit consent.
-- [x] Add basic secret redaction before external AI calls.
+- [-] Build Streamlit workflow for sample data and uploads.
+- [-] Add a clearly labeled offline demo diagnosis provider.
+- [-] Add optional Bedrock adapter with explicit consent.
+- [-] Add basic secret redaction before external AI calls.
 - [ ] Verify Bedrock with configured account and model.
 - [ ] Test invalid, timed-out, and unavailable provider behavior.
 
 ## Security and packaging
-- [x] Add upload size limits and safe parsing.
-- [x] Add ignore rules and environment example.
+- [-] Add upload size limits and safe parsing.
+- [-] Add ignore rules and environment example.
 - [ ] Run Ruff, Bandit, and dependency audit.
 - [ ] Build and run the Docker image.
 - [ ] Review package versions and licensing.
@@ -38,7 +38,7 @@ Status: [ ] not started, [-] in progress, [x] verified complete, [!] blocked.
 - [ ] Review deployment options and costs before provisioning resources.
 
 ## Portfolio
-- [x] Add README, plan, architecture, and threat model.
+- [-] Add README, plan, architecture, and threat model.
 - [ ] Capture real screenshots after running the app.
 - [ ] Record actual test results and coverage.
 - [ ] Validate GitHub Actions remotely.
