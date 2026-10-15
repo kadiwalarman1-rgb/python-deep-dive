@@ -6,7 +6,7 @@ from devops_ai.ai.schemas import InvalidDiagnosis, parse_diagnosis
 def test_redact_sensitive_dictionary_fields_and_text_values():
     evidence = {
         "password": "my-private-password",
-        "findings": [{"summary": "request failed token=abc123", "count": 2}],
+        "findings": [{"summary": "request failed access_token=abc123", "count": 2}],
     }
     clean = redact_evidence(evidence)
     assert clean["password"] == "[REDACTED]"
