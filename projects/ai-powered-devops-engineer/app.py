@@ -31,9 +31,7 @@ def _safe_findings(analysis: dict[str, Any]) -> list[dict[str, Any]]:
     result = []
     for finding in analysis.get("findings", []):
         item = finding.to_dict()
-        item["summary"] = redact_sensitive_text(
-            str(item.get("summary", "")), max_chars=1000
-        )
+        item["summary"] = redact_sensitive_text(str(item.get("summary", "")), max_chars=1000)
         result.append(item)
     return result
 
@@ -71,22 +69,16 @@ with st.sidebar:
         max_value=30,
         value=min(30, max(1, SETTINGS.error_spike_threshold)),
     )
-    st.caption(
-        f"Maximum uploaded file size: {SETTINGS.max_upload_bytes // 1024 // 1024} MiB"
-    )
+    st.caption(f"Maximum uploaded file size: {SETTINGS.max_upload_bytes // 1024 // 1024} MiB)
     st.divider()
     st.write("AI provider")
     bedrock_ready = SETTINGS.bedrock_enabled and bool(SETTINGS.bedrock_model_id)
     if bedrock_ready:
-        st.success(
-            "Amazon Bedrock is configured; a separate consent checkbox is still required."
-        )
+        st.success("Amazon Bedrock is configured; a separate consent checkbox is still required.")
         st.caption(f"Region: {SETTINGS.aws_region}")
     else:
         st.warning("Offline demo provider active. No language model is called.")
-        st.caption(
-            "Set DEVOPS_AI_BEDROCK_ENABLED=true and BEDROCK_MODEL_ID to configure Bedrock."
-        )
+        st.caption("Set DEVOPS_AI_BEDROCK_ENABLED=true and BEDROCK_MODEL_ID to configure Bedrock.")
 
 source_mode = st.radio(
     "Input source",
@@ -127,9 +119,7 @@ if source_mode == "AWS CloudWatch Logs":
                 end_time = datetime.now(UTC)
                 start_time = end_time - timedelta(minutes=lookback_minutes)
                 with st.spinner("Reading a bounded sample of CloudWatch events..."):
-                    events = CloudWatchLogsReader(
-                        region=SETTINGS.aws_region
-                    ).fetch_events(
+                    events = CloudWatchLogsReader(region=SETTINGS.aws_region).fetch_events(
                         log_group_name=log_group_name,
                         start_time_ms=int(start_time.timestamp() * 1000),
                         end_time_ms=int(end_time.timestamp() * 1000),
@@ -240,7 +230,7 @@ m1, m2, m3, m4 = st.columns(4)
 m1.metric("Parsed events", analysis["total_events"])
 m2.metric("Errors + critical", analysis["error_count"])
 m3.metric("Warnings", analysis["warning_count"])
-m4.metric("Error rate", f'{analysis["error_rate_percent"]}%')
+m4.metric("Error rate", f"{analysis['error_rate_percent']}%")
 st.caption(f"Rejected non-empty lines: {analysis['rejected_lines']}")
 
 col1, col2 = st.columns(2)
@@ -281,7 +271,7 @@ else:
             "Finding",
             findings,
             format_func=lambda item: (
-                f'{item["severity"]} | {item["category"]} | {item["summary"][:90]}'
+                f"{item['severity']} | {item['category']} | {item['summary'][:90]}"
             ),
         )
         st.json(selected_finding)
@@ -362,14 +352,13 @@ if st.button("Generate diagnosis"):
         st.session_state["devops_diagnosis"] = {
             "provider": "unavailable",
             "error": (
-                f"{type(exc).__name__}: AI diagnosis unavailable. "
-                "Core log analysis remains usable."
+                f"{type(exc).__name__}: AI diagnosis unavailable. Core log analysis remains usable."
             ),
         }
 
 diagnosis = st.session_state.get("devops_diagnosis")
 if diagnosis:
-    st.caption(f'Provider used: {diagnosis["provider"]}')
+    st.caption(f"Provider used: {diagnosis['provider']}")
     if "error" in diagnosis:
         st.error(diagnosis["error"])
     else:
@@ -380,9 +369,9 @@ if diagnosis:
             diagnosis["result"].get("possible_root_causes", []), start=1
         ):
             with st.expander(
-                f'Hypothesis {index}: {hypothesis.get("description", "Unspecified")[:100]}'
+                f"Hypothesis {index}: {hypothesis.get('description', 'Unspecified')[:100]}"
             ):
-                st.write(f'Confidence: {hypothesis.get("confidence", "LOW")}')
+                st.write(f"Confidence: {hypothesis.get('confidence', 'LOW')}")
                 st.write("Supporting evidence")
                 st.write(hypothesis.get("supporting_evidence", []))
                 st.write("Missing or contradictory evidence")
