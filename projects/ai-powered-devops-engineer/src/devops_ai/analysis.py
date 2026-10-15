@@ -60,10 +60,15 @@ def analyze_events(
         representative = max(grouped, key=lambda event: len(event.message)).message
         findings.append(
             Finding(
-                finding_id=key, category="repeated-error" if count > 1 else "log-error",
-                severity=severity, summary=representative[:300], count=count,
+                finding_id=key,
+                category="repeated-error" if count > 1 else "log-error",
+                severity=severity,
+                summary=representative[:300],
+                count=count,
                 evidence_lines=[event.source_line for event in grouped[:20]],
-                first_observed=first, last_observed=last, method="rule-based",
+                first_observed=first,
+                last_observed=last,
+                method="rule-based",
                 limitations="Default severity rules do not account for business impact.",
             )
         )
@@ -82,23 +87,33 @@ def analyze_events(
             marker = hashlib.sha256(f"spike:{bucket.isoformat()}".encode()).hexdigest()[:16]
             findings.append(
                 Finding(
-                    finding_id=marker, category="error-spike", severity="HIGH",
+                    finding_id=marker,
+                    category="error-spike",
+                    severity="HIGH",
                     summary=f"{count} error or critical events in the five-minute window starting {bucket.isoformat()}.",
-                    count=count, evidence_lines=[event.source_line for event in selected[:20]],
-                    first_observed=bucket, last_observed=selected[-1].timestamp,
+                    count=count,
+                    evidence_lines=[event.source_line for event in selected[:20]],
+                    first_observed=bucket,
+                    last_observed=selected[-1].timestamp,
                     method=f"rule-based; threshold={error_spike_threshold} errors per five minutes",
                     limitations="Threshold signal only; it does not establish statistical significance or root cause.",
                 )
             )
 
-    findings.sort(key=lambda item: (SEVERITY_ORDER.get(item.severity, 5), -item.count, item.summary))
+    findings.sort(
+        key=lambda item: (SEVERITY_ORDER.get(item.severity, 5), -item.count, item.summary)
+    )
     first, last = _time_range(events)
     return {
-        "total_events": total, "rejected_lines": rejected_lines,
-        "error_count": errors, "warning_count": warnings,
+        "total_events": total,
+        "rejected_lines": rejected_lines,
+        "error_count": errors,
+        "warning_count": warnings,
         "critical_count": levels.get("CRITICAL", 0),
         "error_rate_percent": round(errors / total * 100, 2) if total else 0.0,
         "level_counts": dict(sorted(levels.items())),
         "service_counts": dict(Counter(event.service for event in events).most_common()),
-        "findings": findings, "first_observed": first, "last_observed": last,
+        "findings": findings,
+        "first_observed": first,
+        "last_observed": last,
     }
