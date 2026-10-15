@@ -1,3 +1,9 @@
+import json
+from unittest.mock import Mock
+
+import pytest
+
+from devops_ai.ai.bedrock_provider import BedrockDiagnosisProvider
 from devops_ai.ai.mock_provider import MockDiagnosisProvider
 from devops_ai.ai.redaction import redact_evidence, redact_sensitive_text
 from devops_ai.ai.schemas import InvalidDiagnosis, parse_diagnosis
@@ -35,7 +41,7 @@ def test_parse_diagnosis_validates_structured_output():
         "recommended_steps": ["Inspect dependency metrics"],
         "limitations": "This is a hypothesis.",
     }
-    result = parse_diagnosis(__import__("json").dumps(payload))
+    result = parse_diagnosis(json.dumps(payload))
     assert result["possible_root_causes"][0]["confidence"] == "LOW"
 
 
@@ -56,9 +62,7 @@ def test_mock_provider_is_explicitly_a_demo():
     assert result["possible_root_causes"]
 
 
-
 def test_bedrock_adapter_validates_response_and_redacts_evidence(monkeypatch):
-    from devops_ai.ai.bedrock_provider import BedrockDiagnosisProvider
 
     fake_client = Mock()
     model_response = {
@@ -87,9 +91,6 @@ def test_bedrock_adapter_validates_response_and_redacts_evidence(monkeypatch):
 
 
 def test_bedrock_adapter_requires_region_and_model_id():
-    from devops_ai.ai.bedrock_provider import BedrockDiagnosisProvider
-
-    import pytest
 
     with pytest.raises(ValueError, match="Region and model ID"):
         BedrockDiagnosisProvider(region="", model_id="")
