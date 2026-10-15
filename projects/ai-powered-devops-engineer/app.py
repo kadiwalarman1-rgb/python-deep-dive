@@ -69,7 +69,7 @@ with st.sidebar:
         max_value=30,
         value=min(30, max(1, SETTINGS.error_spike_threshold)),
     )
-    st.caption(f"Maximum uploaded file size: {SETTINGS.max_upload_bytes // 1024 // 1024} MiB)
+    st.caption(f"Maximum uploaded file size: {SETTINGS.max_upload_bytes // 1024 // 1024} MiB")
     st.divider()
     st.write("AI provider")
     bedrock_ready = SETTINGS.bedrock_enabled and bool(SETTINGS.bedrock_model_id)
