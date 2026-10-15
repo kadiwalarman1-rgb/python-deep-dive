@@ -33,7 +33,7 @@ def parse_timestamp(value: Any) -> datetime | None:
         return None
     if parsed.tzinfo is None:
         parsed = parsed.replace(tzinfo=UTC)
-    return parsed.astimezone(timezone.utc)
+    return parsed.astimezone(UTC)
 
 
 def _first(data: dict[str, Any], keys: tuple[str, ...]) -> Any:
