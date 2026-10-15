@@ -31,10 +31,26 @@ Python learning labs organized by lab number. Each lab folder contains complete 
 - [Lab 31 - Importing Modules and Standard Libraries](Lab%2031/)
 - [Lab 32 - Creating and Using Python Packages](Lab%2032/)
 - [Lab 33 - Exploring the Python Standard Library](Lab%2033/)
+- [Lab 34 - Advanced Package Usage](Lab%2034/)
 
 ## Running a Lab
 
-Open a lab folder and follow its README. Most scripts can be run with Python 3 without interactive input. For Lab 32, run the demo and test suite from inside the Lab 32 directory:
+Open a lab folder and follow its README. Most scripts can be run with Python 3 without interactive input.
+
+For Lab 32, run the demo and test suite from inside the Lab 32 directory:
 
     python3 test_mathtools.py
     python3 advanced_test.py
+
+For Lab 33, run the file-system and standard-library demonstrations from inside the Lab 33 directory:
+
+    python3 os_demo.py
+    python3 shutil_demo.py
+    python3 sys_demo.py Arman
+    python3 backup_script.py
+    python3 exit_demo.py
+
+For Lab 34, run the package demonstration and automated tests from inside the Lab 34 directory:
+
+    python3 main_demo.py
+    python3 -m unittest advanced_test.py -v
