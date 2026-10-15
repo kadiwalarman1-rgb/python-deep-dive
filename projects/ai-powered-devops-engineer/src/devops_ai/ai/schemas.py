@@ -18,7 +18,7 @@ def parse_diagnosis(response_text: str) -> dict[str, Any]:
     if text.startswith(fence):
         text = text.removeprefix(fence + "json").removeprefix(fence)
         if text.rstrip().endswith(fence):
-            text = text.rstrip()[:-len(fence)]
+            text = text.rstrip()[: -len(fence)]
         text = text.strip()
     try:
         payload = json.loads(text)
@@ -67,9 +67,7 @@ def parse_diagnosis(response_text: str) -> dict[str, Any]:
             "verification_steps": verification[:10],
         })
 
-    limitations = payload.get(
-        "limitations", "AI output is a hypothesis and must be verified."
-    )
+    limitations = payload.get("limitations", "AI output is a hypothesis and must be verified.")
     if not isinstance(limitations, str):
         limitations = "AI output is a hypothesis and must be verified."
     return {
