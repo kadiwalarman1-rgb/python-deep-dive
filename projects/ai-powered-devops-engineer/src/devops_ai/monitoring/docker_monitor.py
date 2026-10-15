@@ -6,10 +6,13 @@ fetches logs, starts/stops containers, or mounts a Docker socket itself.
 
 from __future__ import annotations
 
+import logging
 from typing import Any
 
 
 class DockerMonitor:
+    """Read status from an already-running Docker daemon."""
+
     def __init__(self, *, timeout_seconds: int = 3) -> None:
         self.timeout_seconds = timeout_seconds
 
@@ -53,5 +56,7 @@ class DockerMonitor:
             if client is not None:
                 try:
                     client.close()
-                except Exception:
-                    pass
+                except Exception as exc:
+                    logging.getLogger(__name__).debug(
+                        "Docker client cleanup failed (%s).", type(exc).__name__
+                    )
