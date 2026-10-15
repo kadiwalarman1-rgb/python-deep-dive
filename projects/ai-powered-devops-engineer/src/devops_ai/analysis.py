@@ -79,7 +79,7 @@ def analyze_events(
     for bucket, count in buckets.items():
         if count >= max(1, error_spike_threshold):
             selected = events_by_bucket[bucket]
-            marker = hashlib.sha256(f"spike:{bucket.isoformat()}".encode("utf-8")).hexdigest()[:16]
+            marker = hashlib.sha256(f"spike:{bucket.isoformat()}".encode()).hexdigest()[:16]
             findings.append(
                 Finding(
                     finding_id=marker, category="error-spike", severity="HIGH",
