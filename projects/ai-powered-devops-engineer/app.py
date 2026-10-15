@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 import os
 from pathlib import Path
 from typing import Any
@@ -11,7 +10,7 @@ import streamlit as st
 from dotenv import load_dotenv
 
 from devops_ai.ai.mock_provider import MockDiagnosisProvider
-from devops_ai.ai.redaction import redact_sensitive_text
+from devops_ai.ai.redaction import redact_evidence, redact_sensitive_text
 from devops_ai.analysis import analyze_events
 from devops_ai.config import Settings
 from devops_ai.ingestion import parse_log_bytes
@@ -221,8 +220,7 @@ if st.button("Generate diagnosis"):
             for item in findings[:10]
         ],
     }
-    evidence_text = redact_sensitive_text(json.dumps(evidence, ensure_ascii=False), max_chars=12_000)
-    safe_evidence = json.loads(evidence_text)
+    safe_evidence = redact_evidence(evidence)
     try:
         if bedrock_ready and allow_bedrock:
             from devops_ai.ai.bedrock_provider import BedrockDiagnosisProvider
