@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 
@@ -14,7 +14,7 @@ def _iso(value: Any) -> Any:
 def build_report(analysis: dict[str, Any], *, source_name: str) -> dict[str, Any]:
     return {
         "schema_version": "1.0",
-        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "generated_at": datetime.now(UTC).isoformat(),
         "source_name": source_name,
         "summary": {
             "total_events": analysis.get("total_events", 0),
