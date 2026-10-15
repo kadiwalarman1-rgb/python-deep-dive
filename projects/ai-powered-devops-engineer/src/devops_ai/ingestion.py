@@ -11,12 +11,20 @@ from typing import Any
 from devops_ai.models import LogEvent
 
 TIMESTAMP_PREFIX = re.compile(r"^(?P<timestamp>\d{4}-\d{2}-\d{2}[T ][0-9:.+\-]+Z?)\s+(?P<body>.*)$")
-LEVEL_PATTERN = re.compile(r"\b(DEBUG|INFO|NOTICE|WARN(?:ING)?|ERROR|ERR|CRITICAL|FATAL)\b", re.IGNORECASE)
+LEVEL_PATTERN = re.compile(
+    r"\b(DEBUG|INFO|NOTICE|WARN(?:ING)?|ERROR|ERR|CRITICAL|FATAL)\b", re.IGNORECASE
+)
 HTTP_STATUS_PATTERN = re.compile(r"\s(?P<status>[1-5]\d{2})\s+\d+(?:\s|$)")
 LEVEL_MAP = {
-    "DEBUG": "DEBUG", "INFO": "INFO", "NOTICE": "INFO", "WARN": "WARNING",
-    "WARNING": "WARNING", "ERR": "ERROR", "ERROR": "ERROR",
-    "CRITICAL": "CRITICAL", "FATAL": "CRITICAL",
+    "DEBUG": "DEBUG",
+    "INFO": "INFO",
+    "NOTICE": "INFO",
+    "WARN": "WARNING",
+    "WARNING": "WARNING",
+    "ERR": "ERROR",
+    "ERROR": "ERROR",
+    "CRITICAL": "CRITICAL",
+    "FATAL": "CRITICAL",
 }
 
 
@@ -68,7 +76,9 @@ def _event_from_json(line: str, line_number: int, default_service: str) -> LogEv
         level = "ERROR"
     elif status is not None and 400 <= status <= 499 and level == "UNKNOWN":
         level = "WARNING"
-    return LogEvent(timestamp, level, str(message)[:20_000], str(service)[:200], line_number, status)
+    return LogEvent(
+        timestamp, level, str(message)[:20_000], str(service)[:200], line_number, status
+    )
 
 
 def _event_from_text(line: str, line_number: int, default_service: str) -> LogEvent | None:
@@ -93,7 +103,9 @@ def _event_from_text(line: str, line_number: int, default_service: str) -> LogEv
     return LogEvent(timestamp, level, body[:20_000], default_service[:200], line_number, status)
 
 
-def parse_lines(lines: Iterable[str], default_service: str = "unknown") -> tuple[list[LogEvent], int]:
+def parse_lines(
+    lines: Iterable[str], default_service: str = "unknown"
+) -> tuple[list[LogEvent], int]:
     """Return parsed events and rejected non-empty lines."""
     events: list[LogEvent] = []
     rejected = 0
