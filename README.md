@@ -32,6 +32,7 @@ Python learning labs organized by lab number. Each lab folder contains complete 
 - [Lab 32 - Creating and Using Python Packages](Lab%2032/)
 - [Lab 33 - Exploring the Python Standard Library](Lab%2033/)
 - [Lab 34 - Advanced Package Usage](Lab%2034/)
+- [Lab 35 - Final Project: Building a Package with Python](Lab%2035/)
 
 ## Running a Lab
 
@@ -54,3 +55,9 @@ For Lab 34, run the package demonstration and automated tests from inside the La
 
     python3 main_demo.py
     python3 -m unittest advanced_test.py -v
+
+For Lab 35, run the package demo and validation scripts from inside the Lab 35 directory:
+
+    python3 example_usage.py
+    python3 test_mathtools.py
+    python3 validate_package.py
