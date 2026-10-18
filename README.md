@@ -34,6 +34,7 @@ Python learning labs organized by lab number. Each lab folder contains runnable 
 - [Lab 34 - Advanced Package Usage](Lab%2034/)
 - [Lab 35 - Final Project: Building a Package with Python](Lab%2035/)
 - [Lab 36 - Introduction to Classes and Objects](Lab%2036/)
+- [Lab 37 - Constructor and Initialization: Using __init__](Lab%2037/)
 - [Lab 38 - Methods and Functions: Defining and Calling Methods](Lab%2038/)
 
 ## Running a Lab
@@ -73,6 +74,15 @@ For Lab 36:
     python3 student_system.py
     python3 object_experiments.py
     python3 -m unittest advanced_test.py -v
+
+For Lab 37, run these commands from inside the Lab 37 directory:
+
+    python3 student_class.py
+    python3 book_library.py
+    python3 vehicle_system.py
+    python3 inventory_system.py
+    python3 default_parameters.py
+    python3 -m unittest -v test_lab37.py
 
 For Lab 38, run these commands from inside the Lab 38 directory:
 
