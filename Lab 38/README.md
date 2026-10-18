@@ -32,19 +32,19 @@ No third-party packages are required.
 
 ## Key Concepts
 
-- \`self\` refers to the current object and gives a method access to its attributes.
-- \`__init__()\` initializes each new instance with its own data.
-- Methods such as \`set_age()\`, \`add_test_score()\`, and \`mark_attendance()\` validate input before changing state.
-- Calculation methods such as \`calculate_average_score()\` and \`calculate_overall_gpa()\` return values that other methods can reuse.
-- \`get_performance_summary()\` returns a dictionary, while \`generate_transcript()\` returns a formatted string.
-- \`StudentManagementSystem\` composes these methods to create class-level reports.
+- self refers to the current object and gives a method access to its attributes.
+- __init__() initializes each new instance with its own data.
+- Methods such as set_age(), add_test_score(), and mark_attendance() validate input before changing state.
+- Calculation methods such as calculate_average_score() and calculate_overall_gpa() return values that other methods can reuse.
+- get_performance_summary() returns a dictionary, while generate_transcript() returns a formatted string.
+- StudentManagementSystem composes these methods to create class-level reports.
 
 ## Calculation Rules Used in This Lab
 
-- The basic \`Student\` class assumes 180 school days in a school year.
+- The basic Student class assumes 180 school days in a school year.
 - Basic grade points use these thresholds: 90–100 → 4.0, 80–89.99 → 3.0, 70–79.99 → 2.0, 60–69.99 → 1.0, below 60 → 0.0.
 - The advanced GPA is the unweighted average of grade points for subjects that have at least one recorded score.
-- The advanced attendance percentage counts \`Present\` and \`Excused\` days as good attendance, matching the lab's stated rule.
+- The advanced attendance percentage counts Present and Excused days as good attendance, matching the lab's stated rule.
 - Student-management data is held in memory for the duration of the program; it is not saved to a database or file.
 
 ## Example Workflow
@@ -52,5 +52,5 @@ No third-party packages are required.
 1. Create a student object.
 2. Use methods to add attendance and scores.
 3. Call calculation methods to retrieve averages, grade points, and summaries.
-4. Enroll an \`AdvancedStudent\` in subjects and record attendance.
-5. Use \`StudentManagementSystem\` to list students, generate a class report, and identify top performers.
+4. Enroll an AdvancedStudent in subjects and record attendance.
+5. Use StudentManagementSystem to list students, generate a class report, and identify top performers.
