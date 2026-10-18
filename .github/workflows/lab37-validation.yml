@@ -1,0 +1,38 @@
+name: Lab 37 Validation
+
+on:
+  push:
+    paths:
+      - "Lab 37/**"
+      - ".github/workflows/lab37-validation.yml"
+      - "README.md"
+  pull_request:
+    paths:
+      - "Lab 37/**"
+      - ".github/workflows/lab37-validation.yml"
+      - "README.md"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile all lab scripts
+        working-directory: Lab 37
+        run: python -m compileall -q .
+      - name: Run Lab 37 unit tests
+        working-directory: Lab 37
+        run: python -m unittest -v test_lab37.py
+      - name: Run all Lab 37 demos
+        working-directory: Lab 37
+        run: |
+          python student_class.py > /dev/null
+          python book_library.py > /dev/null
+          python vehicle_system.py > /dev/null
+          python inventory_system.py > /dev/null
+          python default_parameters.py > /dev/null
