@@ -36,6 +36,7 @@ Python learning labs organized by lab number. Each lab folder contains runnable 
 - [Lab 36 - Introduction to Classes and Objects](Lab%2036/)
 - [Lab 37 - Constructor and Initialization: Using __init__](Lab%2037/)
 - [Lab 38 - Methods and Functions: Defining and Calling Methods](Lab%2038/)
+- [Lab 39 - Inheritance: Basic Inheritance Concept](Lab%2039/)
 
 ## Running a Lab
 
@@ -75,7 +76,7 @@ For Lab 36:
     python3 object_experiments.py
     python3 -m unittest advanced_test.py -v
 
-For Lab 37, run these commands from inside the Lab 37 directory:
+For Lab 37:
 
     python3 student_class.py
     python3 book_library.py
@@ -84,10 +85,19 @@ For Lab 37, run these commands from inside the Lab 37 directory:
     python3 default_parameters.py
     python3 -m unittest -v test_lab37.py
 
-For Lab 38, run these commands from inside the Lab 38 directory:
+For Lab 38:
 
     python3 student_manager.py
     python3 test_students.py
     python3 advanced_student.py
     python3 student_system.py
     python3 -m unittest -v test_student_management.py
+
+For Lab 39, run these commands from inside the Lab 39 directory:
+
+    python3 test_inheritance.py
+    python3 enhanced_test.py
+    python3 override_test.py
+    python3 experiment.py
+    python3 advanced_concepts.py
+    python3 -m unittest -v test_lab39.py

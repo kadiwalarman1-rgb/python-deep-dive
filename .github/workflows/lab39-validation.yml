@@ -1,0 +1,38 @@
+name: Lab 39 Validation
+
+on:
+  push:
+    paths:
+      - "Lab 39/**"
+      - ".github/workflows/lab39-validation.yml"
+      - "README.md"
+  pull_request:
+    paths:
+      - "Lab 39/**"
+      - ".github/workflows/lab39-validation.yml"
+      - "README.md"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile Lab 39 scripts
+        working-directory: Lab 39
+        run: python -m compileall -q .
+      - name: Run unit tests
+        working-directory: Lab 39
+        run: python -m unittest -v test_lab39.py
+      - name: Run example programs
+        working-directory: Lab 39
+        run: |
+          python test_inheritance.py > /dev/null
+          python enhanced_test.py > /dev/null
+          python override_test.py > /dev/null
+          python experiment.py > /dev/null
+          python advanced_concepts.py > /dev/null
