@@ -37,6 +37,7 @@ Python learning labs organized by lab number. Each lab folder contains runnable 
 - [Lab 37 - Constructor and Initialization: Using __init__](Lab%2037/)
 - [Lab 38 - Methods and Functions: Defining and Calling Methods](Lab%2038/)
 - [Lab 39 - Inheritance: Basic Inheritance Concept](Lab%2039/)
+- [Lab 40 - Polymorphism: Understanding Polymorphism](Lab%2040/)
 
 ## Running a Lab
 
@@ -101,3 +102,9 @@ For Lab 39, run these commands from inside the Lab 39 directory:
     python3 experiment.py
     python3 advanced_concepts.py
     python3 -m unittest -v test_lab39.py
+
+
+For Lab 40, run these commands from inside the Lab 40 directory:
+
+    python3 shapes.py
+    python3 -m unittest -v test_lab40.py
