@@ -40,6 +40,26 @@ Python learning labs organized by lab number. Each lab folder contains runnable 
 - [Lab 40 - Polymorphism: Understanding Polymorphism](Lab%2040/)
 - [Lab 41 - Encapsulation: Getters, Setters, and Properties](Lab%2041/)
 
+## Proof of Completion — Daily Work Log
+
+Use the terminal-based tracker to record what you worked on each day and link the entry to a real GitHub commit when available. It uses only the Python standard library.
+
+From the repository root, run:
+
+    python3 progress_tracker.py add
+
+Other commands:
+
+    python3 progress_tracker.py list
+    python3 progress_tracker.py report
+
+- `add` asks for the date, lab/topic, work completed, what you learned, and status.
+- The tracker can attach the latest local Git commit and create its GitHub commit URL from the repository's `origin` remote.
+- Entries are stored in `progress/work_log.json`.
+- A readable report is generated at `progress/PROOF_OF_COMPLETION.md`.
+
+For valid commit links, run the script from a local clone of this repository with Git installed and the GitHub `origin` remote configured. The daily work description is self-reported; a commit link proves that a commit exists, not that every described task was independently verified.
+
 ## Running a Lab
 
 Open a lab folder and follow its README. Most scripts can be run with Python 3 without interactive input.
@@ -109,7 +129,7 @@ For Lab 40, run these commands from inside the Lab 40 directory:
     python3 shapes.py
     python3 -m unittest -v test_lab40.py
 
-For Lab 41, run these commands from inside the Lab 41 directory:
+For Lab 41:
 
     python3 person_class.py
     python3 test_validation.py
