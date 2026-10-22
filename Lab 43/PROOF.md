@@ -1,4 +1,4 @@
-# Lab 43 - Magic Methods Execution Proof
+# Lab 43 - Magic Methods | Execution Proof
 
 ## Run command
 
@@ -6,25 +6,30 @@
 python3 lab_43.py
 ```
 
-## What the terminal run demonstrates
+## Terminal evidence
 
-The supplied terminal output shows the lab completed successfully and prints: **"All magic methods are working as expected."**
+The screenshots below are the actual terminal outputs supplied for this lab.
 
-### Magic methods tested
-- `__str__` and `__repr__` produce readable object representations for `Person` and `Book`.
-- `__add__` combines vectors, books, playlists, and bank-account balances.
-- `__eq__`, `__lt__`, `__le__`, and `__gt__` implement equality and comparisons.
-- `__len__` allows the Playlist object to work with `len()`.
-- `__bool__` reports whether a bank account has a positive balance.
+### Screenshot 1: Lab launch and string representation
 
-### Results visible in the terminal evidence
-- Vector addition: `Vector(3, 4) + Vector(1, 2) = Vector(4, 6)`.
-- Combined book: `'1984 & Animal Farm' by George Orwell & George Orwell`, total **440 pages**.
-- Combined playlist: **5 songs**.
-- Bank account: $1,000 + $500 creates a joint account with **$1,500.00**.
-- Deposit and withdrawal examples return balances of **$1,200.00** and **$900.00**.
-- Boolean checks return `True` for a funded account and `False` for an empty account.
+![Lab 43 proof screenshot 1](proof/lab43-proof-1.jpg)
 
-## Evidence files
+### Screenshot 2: Vector, book, playlist, and comparison examples
 
-The original terminal screenshots are included in the Lab 42 and Lab 43 evidence ZIP shared in this conversation. They still need to be uploaded as binary image files to this repository before Markdown can embed them directly here.
+![Lab 43 proof screenshot 2](proof/lab43-proof-2.jpg)
+
+### Screenshot 3: Comprehensive magic-method tests
+
+![Lab 43 proof screenshot 3](proof/lab43-proof-3.jpg)
+
+### Screenshot 4: BankAccount arithmetic and Boolean behavior
+
+![Lab 43 proof screenshot 4](proof/lab43-proof-4.jpg)
+
+## Results captured
+
+- The terminal reports **"Lab completed successfully!"**
+- `__str__` and `__repr__` provide readable object output.
+- `__add__` supports custom addition for vectors, books, playlists, and bank accounts.
+- Comparison methods and `__len__` are demonstrated.
+- BankAccount examples show deposits, withdrawals, joint balances, and Boolean checks.
