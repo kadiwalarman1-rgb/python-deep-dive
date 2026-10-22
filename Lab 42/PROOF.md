@@ -6,21 +6,11 @@
 python3 demo.py
 ```
 
-## Terminal evidence
+## Actual terminal screenshots
 
-The screenshots below are the actual terminal outputs supplied for this lab.
+The image below combines the three terminal screenshots supplied for Lab 42.
 
-### Screenshot 1: Property access, data hiding, discount, and inventory operations
-
-![Lab 42 proof screenshot 1](proof/lab42-proof-1.jpg)
-
-### Screenshot 2: Validation checks and multiple products
-
-![Lab 42 proof screenshot 2](proof/lab42-proof-2.jpg)
-
-### Screenshot 3: Final inventory total and successful completion
-
-![Lab 42 proof screenshot 3](proof/lab42-proof-3.jpg)
+![Lab 42 terminal proof screenshots](proof/lab42-proof-images.jpg)
 
 ## Results captured
 
