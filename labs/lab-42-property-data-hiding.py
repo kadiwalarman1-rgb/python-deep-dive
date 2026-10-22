@@ -48,7 +48,7 @@ class Product:
         if value < 0:
             raise ValueError("Price cannot be negative.")
         if value > self.MAX_PRICE:
-            raise ValueError(f"Price cannot exceed $${self.MAX_PRICE:,.2f}.")
+            raise ValueError(f"Price cannot exceed ${self.MAX_PRICE:,.2f}.")
         self.__price = float(value)
 
     def apply_discount(self, percentage: float) -> float:
@@ -63,7 +63,7 @@ class Product:
 
     def display_info(self) -> None:
         print(f"Product: {self.name}")
-        print(f"Price: $${self.price:,.2f}")
+        print(f"Price: ${self.price:,.2f}")
 
 
 class SmartProduct(Product):
@@ -130,9 +130,9 @@ class SmartProduct(Product):
         print("\n--- Product Information ---")
         print(f"Name: {self.name}")
         print(f"Category: {self.category}")
-        print(f"Price: $${self.price:,.2f}")
+        print(f"Price: ${self.price:,.2f}")
         print(f"Quantity: {self.quantity}")
-        print(f"Total inventory value: $${self.total_value:,.2f}")
+        print(f"Total inventory value: ${self.total_value:,.2f}")
         print(f"Stock status: {self.stock_status}")
         print(f"Expensive item: {'Yes' if self.is_expensive else 'No'}")
 
@@ -156,7 +156,7 @@ class SmartProduct(Product):
 
         revenue = amount * self.price
         self.quantity = self.quantity - amount
-        print(f"Sold {amount} units. Revenue: $${revenue:,.2f}")
+        print(f"Sold {amount} units. Revenue: ${revenue:,.2f}")
         print(f"Remaining quantity: {self.quantity}")
         return revenue
 
@@ -179,7 +179,7 @@ def run_demo() -> None:
     # 1. Private attribute + property getter/setter
     laptop = Product("Gaming Laptop", 1_200)
     laptop.display_info()
-    print(f"Read through property: $${laptop.price:,.2f}")
+    print(f"Read through property: ${laptop.price:,.2f}")
 
     try:
         print(laptop.__price)
@@ -187,13 +187,13 @@ def run_demo() -> None:
         print("Direct laptop.__price access is blocked, as expected.")
 
     # Name mangling exists, but bypassing it is not recommended.
-    print(f"Name-mangled value (demonstration only): $${laptop._Product__price:,.2f}")
+    print(f"Name-mangled value (demonstration only): ${laptop._Product__price:,.2f}")
 
     # 2. Update a value through the validated setter and apply a discount.
     laptop.price = 1_350
-    print(f"Updated price: $${laptop.price:,.2f}")
+    print(f"Updated price: ${laptop.price:,.2f}")
     laptop.apply_discount(15)
-    print(f"Price after 15% discount: $${laptop.price:,.2f}")
+    print(f"Price after 15% discount: ${laptop.price:,.2f}")
 
     # 3. Multiple properties + computed read-only properties.
     stock = SmartProduct("Gaming Laptop", 1_500, 25, "Electronics")
@@ -222,7 +222,7 @@ def run_demo() -> None:
         product.display_full_info()
 
     inventory_total = sum(product.total_value for product in products)
-    print(f"\nTotal inventory value: $${inventory_total:,.2f}")
+    print(f"\nTotal inventory value: ${inventory_total:,.2f}")
     print("\nLab demo complete.")
 
 
