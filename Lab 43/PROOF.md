@@ -6,11 +6,9 @@
 python3 lab_43.py
 ```
 
-## Actual terminal screenshots
+## Actual terminal screenshot
 
-The image below combines the four terminal screenshots supplied for Lab 43.
-
-![Lab 43 terminal proof screenshots](proof/lab43-proof-images.jpg)
+![Lab 43 terminal proof screenshot](proof/lab43-final-proof.png)
 
 ## Results captured
 
