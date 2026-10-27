@@ -39,6 +39,8 @@ Python learning labs organized by lab number. Each lab folder contains runnable 
 - [Lab 39 - Inheritance: Basic Inheritance Concept](Lab%2039/)
 - [Lab 40 - Polymorphism: Understanding Polymorphism](Lab%2040/)
 - [Lab 41 - Encapsulation: Getters, Setters, and Properties](Lab%2041/)
+- [Lab 47 - Multiple Inheritance](Lab%2047/)
+- [Lab 48 - Final Project: OOP Library Management System](Lab%2048/)
 
 ## Proof of Completion — Daily Work Log
 
