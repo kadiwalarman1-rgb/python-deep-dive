@@ -41,6 +41,7 @@ Python learning labs organized by lab number. Each lab folder contains runnable 
 - [Lab 41 - Encapsulation: Getters, Setters, and Properties](Lab%2041/)
 - [Lab 47 - Multiple Inheritance](Lab%2047/)
 - [Lab 48 - Final Project: OOP Library Management System](Lab%2048/)
+- [Lab 49 - Introduction to Python Decorators](Lab%2049/)
 
 ## Proof of Completion — Daily Work Log
 
