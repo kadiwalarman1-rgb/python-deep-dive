@@ -230,10 +230,11 @@ class ResourceManager:
         self.max_connections = max_connections
         self.active_connections = 0
         self.lock = threading.Lock()
-        self.acquired = False
+        self._holders = set()
 
     def __enter__(self):
         print(f"Attempting to acquire resource: {self.resource_name}")
+        thread_id = threading.get_ident()
         with self.lock:
             if self.active_connections >= self.max_connections:
                 raise RuntimeError(
@@ -241,7 +242,7 @@ class ResourceManager:
                     f"for {self.resource_name}"
                 )
             self.active_connections += 1
-            self.acquired = True
+            self._holders.add(thread_id)
             print(
                 f"Resource acquired: {self.resource_name} "
                 f"({self.active_connections}/{self.max_connections})"
@@ -249,10 +250,11 @@ class ResourceManager:
         return self
 
     def __exit__(self, exc_type, exc_value, traceback) -> bool:
-        if self.acquired:
-            with self.lock:
+        thread_id = threading.get_ident()
+        with self.lock:
+            if thread_id in self._holders:
+                self._holders.remove(thread_id)
                 self.active_connections -= 1
-                self.acquired = False
                 print(
                     f"Resource released: {self.resource_name} "
                     f"({self.active_connections}/{self.max_connections})"
@@ -264,8 +266,8 @@ class ResourceManager:
         return False
 
     def do_work(self, duration: float = 1.0) -> None:
-        if not self.acquired:
-            raise RuntimeError("Resource has not been acquired.")
+        if threading.get_ident() not in self._holders:
+            raise RuntimeError("Resource has not been acquired by this thread.")
         if duration < 0:
             raise ValueError("duration must be non-negative")
         print(f"Working with {self.resource_name} for {duration:.2f}s...")
